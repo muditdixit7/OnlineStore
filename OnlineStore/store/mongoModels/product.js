@@ -1,10 +1,14 @@
 var mongoose = require('mongoose');
-var promise = require('es6-promise');
+var Promise = require('es6-promise');
 
-function init(config){
-    var initPromise = new Promise();
-	mongoose.connect(config.mongodb.url);
-}
+var initPromise = new Promise(function(resolve,reject){
+	mongoose.connect(config.mongodb.url,function(err){
+        if(!err)
+            resolve(initPromise);
+        else
+            reject(err);
+        })
+});
 
 var productSchema = new mongoose.Schema({
     title : string,
@@ -31,7 +35,6 @@ locationModel.deleteProduct = function (params) {
 locationModel.updateProduct = function (params) {
     
 }
-
 
 exports.locationModel = locationModel; 
 exports.initPromise = initPromise;

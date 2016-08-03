@@ -2,10 +2,10 @@ var productModel = require('./mongoModels/product.js')
 var Promise = require('es6-promise');
 
 
-function listAllProducts(req, res, next) {
+function listAllProducts(options) {
     var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(req, res, options)
+	store.listAllProducts(options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
@@ -15,10 +15,10 @@ function listAllProducts(req, res, next) {
     return promise;
 }
 
-function createProduct(req, res, next) {
+function createProduct(pid,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(req, res, options)
+	store.listAllProducts(pid, options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
@@ -28,10 +28,10 @@ function createProduct(req, res, next) {
     return promise;
 }
 
-function updateProduct(req, res, next) {
+function updateProduct(pid,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(req, res, options)
+	store.listAllProducts(pid, options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
@@ -41,10 +41,10 @@ function updateProduct(req, res, next) {
     return promise;
 }
 
-function deleteProduct(req, res, next) {
+function deleteProduct(pid,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(req, res, options)
+	store.listAllProducts(pid, options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {

@@ -17,7 +17,7 @@ router.get('/deleteProduct', deleteProduct);
 
 function listAllProducts(req, res, next) {
 	var options = {};
-	controller.listAllProducts(req, res, options)
+	controller.listAllProducts(options)
 		.then(function success(products) {
 			var reponse = {};
 			reponse.products = products;
@@ -33,7 +33,8 @@ function listAllProducts(req, res, next) {
 
 function createProduct(req, res, next) {
 	var options = {};
-		.then(function success(products) {
+	controller.createProduct(req.body)
+	.then(function success(products) {
 			var reponse = {};
 			reponse.products = products;
 			reponse.status = successStatus;
@@ -48,7 +49,9 @@ function createProduct(req, res, next) {
 
 function updateProduct(req, res, next) {
 	var options = {};
-	controller.updateProduct(req, res, options)
+	if(req.body.id)
+		var pid = req.body.id;
+	controller.updateProduct(pid, options)
 		.then(function success(products) {
 			var reponse = {};
 			reponse.products = products;
@@ -64,7 +67,9 @@ function updateProduct(req, res, next) {
 
 function deleteProduct(req, res, next) {
 	var options = {};
-	controller.deleteProduct(req, res, options)
+	if(req.body.id)
+		var pid = req.body.id;
+	controller.deleteProduct(pid, options)
 		.then(function success(products) {
 			var reponse = {};
 			reponse.products = products;

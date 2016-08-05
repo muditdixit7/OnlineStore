@@ -1,24 +1,28 @@
 var store = require('../store/userStore.js')
-var Promise = require('es6-promise');
+var Promise = require('es6-promise').Promise;
 
-
+createProduct({},{})
 function listAllProducts(options) {
     var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(options)
-		.then(function success(products) {
+	store.listAllProducts(options).then(function success(products) {
 			resolve(products);
 		}, function error(err) {
 			reject(err);
 		});
-    })
-    return promise;
+    });
+    
+   return promise;
 }
 
-function createProduct(pid,options) {
+function createProduct(productObj,options) {
 	var promise = new Promise(function(resolve,reject){
+    var additionalDetails = validateProduct(productObj);
+    
+    if(!productObj.isValid)
+        reject(additionalDetails)
 
-	store.listAllProducts(pid,options)
+	store.createProduct(productObj,options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
@@ -31,7 +35,7 @@ function createProduct(pid,options) {
 function updateProduct(pid,opitons) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(pid,options)
+	store.updateProduct(pid,options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
@@ -44,7 +48,7 @@ function updateProduct(pid,opitons) {
 function deleteProduct(pid,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(pid,options)
+	store.deleteProduct(pid,options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
@@ -52,6 +56,11 @@ function deleteProduct(pid,options) {
 		});
     })
     return promise;
+}
+
+function validateProduct(productObj){
+    productObj.isValid = true;//Initially validating the product
+    return "";
 }
 
 exports.listAllProducts = listAllProducts;

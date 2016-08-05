@@ -1,56 +1,58 @@
-var productModel = require('./mongoModels/product.js')
-var Promise = require('es6-promise');
+var product = require('../store/mongoModels/product.js')
+var Promise = require('es6-promise').Promise;
 
 
 function listAllProducts(options) {
     var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(options)
+	product.listProducts(options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
 			reject(err);
 		});
-    })
+    });
     return promise;
 }
 
-function createProduct(pid,options) {
+function createProduct(productObj ,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(pid, options)
+	product.saveProduct(productObj, options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
 			reject(err);
 		});
-    })
+    });
     return promise;
 }
+
+
 
 function updateProduct(pid,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(pid, options)
+	productModel.updateProduct(pid, options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
 			reject(err);
 		});
-    })
+    });
     return promise;
 }
 
 function deleteProduct(pid,options) {
 	var promise = new Promise(function(resolve,reject){
 
-	store.listAllProducts(pid, options)
+	productModel.deleteProduct(pid, options)
 		.then(function success(products) {
 			resolve(products);
 		}, function error(err) {
 			reject(err);
 		});
-    })
+    });
     return promise;
 }
 

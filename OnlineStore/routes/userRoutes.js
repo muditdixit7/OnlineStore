@@ -1,39 +1,41 @@
 var express = require('express');
-var router = express.Strategy;
+var router = express.Router();
+var when = require('when');
 var controller = require('../controller/userController.js')
 var successStatus = {
 	code: 200,
 	msg: "Success"
 };
-
+router.get('/hello',helloWord);
 router.get('/listAllProducts', listAllProducts);
-
 router.get('/updateProduct', updateProduct);
-
 router.get('/createProduct', createProduct);
-
 router.get('/deleteProduct', deleteProduct);
 
-
+function helloWord(req,res){
+    res.send("Hello World");
+}
 function listAllProducts(req, res, next) {
 	var options = {};
-	controller.listAllProducts(options)
-		.then(function success(products) {
+	when(controller.listAllProducts(options),
+    function success(products) {
 			var reponse = {};
 			reponse.products = products;
 			reponse.status = successStatus;
-			return next();
+			//return next();
 
 		}, function error(err) {
+            console.log(err);
 			var reponse = {};
 			reponse.err = err;
-			return next();
+			//return next();
 		});
 }
 
 function createProduct(req, res, next) {
 	var options = {};
-	controller.createProduct(req.body)
+    var productFromRequest = req.body;
+	controller.createProduct(productFromRequest,options)
 	.then(function success(products) {
 			var reponse = {};
 			reponse.products = products;
@@ -82,3 +84,5 @@ function deleteProduct(req, res, next) {
 			return next();
 		});
 }
+
+module.exports = router;

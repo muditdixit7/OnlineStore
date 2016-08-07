@@ -2,6 +2,23 @@ var store = require('../store/userStore.js')
 var Promise = require('es6-promise').Promise;
 
 createProduct({},{})
+
+
+
+function getProductById(pid,options){
+    var promise = new Promise(function(resolve,reject){
+
+	store.getProductById(pid,options)
+	.then(function success(product) {
+			resolve(products);
+		}, function error(err) {
+			reject(err);
+		});
+    });
+    
+   return promise;
+}
+
 function listAllProducts(options) {
     var promise = new Promise(function(resolve,reject){
 
@@ -63,6 +80,7 @@ function validateProduct(productObj){
     return "";
 }
 
+exports.getProductById = getProductById;
 exports.listAllProducts = listAllProducts;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;

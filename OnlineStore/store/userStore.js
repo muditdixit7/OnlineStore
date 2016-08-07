@@ -2,6 +2,19 @@ var product = require('../store/mongoModels/product.js')
 var Promise = require('es6-promise').Promise;
 
 
+function getProductById(pid,options){
+    var promise = new Promise(function(resolve,reject){
+
+	product.getProductById(options)
+		.then(function success(products) {
+			resolve(products);
+		}, function error(err) {
+			reject(err);
+		});
+    });
+    return promise;
+}
+
 function listAllProducts(options) {
     var promise = new Promise(function(resolve,reject){
 
@@ -56,6 +69,7 @@ function deleteProduct(pid,options) {
     return promise;
 }
 
+exports.getProductById = getProductById;
 exports.listAllProducts = listAllProducts;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;

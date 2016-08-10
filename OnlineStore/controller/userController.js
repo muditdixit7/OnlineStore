@@ -20,16 +20,8 @@ function getProductById(pid, options) {
 }
 
 function listAllProducts(options) {
-    var pageSize = 10;
-    var pageNumber = 1;
-	var promise = new Promise(function(resolve, reject) {
-
-        if(options.psize)
-            pageSize = psize;
-
-        if(options.pnum)
-            pageNumber = pnum;    
-		store.listAllProducts(options).then(function success(products) {
+ 	var promise = new Promise(function(resolve, reject) {
+		 store.listAllProducts(options).then(function success(products) {
 			resolve(products);
 		}, function error(err) {
 			reject(err);

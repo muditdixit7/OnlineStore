@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
 //var initPromise = new Promise(function(resolve,reject){
@@ -44,8 +45,9 @@ var productSchema = new mongoose.Schema({
     collection: 'products'
 })
 
-var productModel = mongoose.model('products', productSchema);
+productSchema.plugin(mongoosePaginate);
 
+var productModel = mongoose.model('products', productSchema);
 
 exports.getProductById = function(pid, options) {
     var promise = new Promise(function(resolve, reject) {
@@ -55,13 +57,6 @@ exports.getProductById = function(pid, options) {
             resolve(data);
         });
     });
-    // productModel.findById({_id:pid})
-    // 	.then(function success(products) {
-    // 		resolve(products);
-    // 	}, function error(err) {
-    // 		reject(err);
-    // 	});
-    // });
     return promise;
 }
 
@@ -70,12 +65,12 @@ exports.listProducts = function(options) {
     var pageNumber = 1;
     var promise = new Promise(function(resolve, reject) {
         if(options.psize)
-            pageSize = psize;
+            pageSize = options.psize;
 
         if(options.pnum)
-            pageNumber = pnum;
+            pageNumber = options.pnum;
             
-        productModel.paginate({
+        productModel.paginate({},{
 				page: pageNumber,
 				limit: pageSize
 			},function(err,data){
@@ -83,16 +78,16 @@ exports.listProducts = function(options) {
                     reject(err);
                 }
                else {
-					var responseObj = {};
-					responseOb.products = result.docs;
-					responseOb.paging = {
-						pageNumber: result.page,
-						pageSize: result.limit,
-						totalPages: result.pages
+					var response = {};
+					response.products = data.docs;
+					response.paging = {
+						pageNumber: data.page,
+						pageSize: data.limit,
+						totalPages: data.pages
 					};
-					resolve(responseObj);
+					resolve(response);
                }
-            });
+         });
     });
     return promise;
 }
@@ -106,12 +101,6 @@ exports.saveProduct = function(productObj, options) {
 
             resolve(data);
         });
-        //  .then(function success(data){
-        //     resolve(data);
-        // }
-        // ,function error(err){
-        //     reject(err);
-        // })
     });
     return promise;
 }

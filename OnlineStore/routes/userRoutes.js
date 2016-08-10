@@ -51,18 +51,18 @@ function getProducts(req, res, next) {
 
 	when(controller.listAllProducts(options),
 		function success(products) {
-			var reponse = {};
-			reponse.products = products;
-			reponse.status = successStatus;
+			var response = {};
+			response.products = products;
+			response.status = successStatus;
 			res.send(response);
 			//return next();
 
 		},
 		function error(err) {
 			console.log(err);
-			var reponse = {};
-			reponse.err = err;
-			res.send(respo)
+			var response = {};
+			response.err = err;
+			res.send(response);
 				//return next();
 		});
 }

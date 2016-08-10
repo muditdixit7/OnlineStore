@@ -6,71 +6,74 @@ var successStatus = {
 	code: 200,
 	msg: "Success"
 };
-router.get('/hello',helloWord);
+router.get('/hello', helloWord);
 router.get('/getProducts', getProducts);
-router.get('/getProductById/:pid',getProductById)
-router.post('/updateProduct', updateProduct);
+router.get('/getProductById/:pid', getProductById)
+router.post('/updateProduct/:pid', updateProduct);
 router.post('/createProduct', createProduct);
-router.post('/deleteProduct', deleteProduct);
+router.delete('/deleteProduct/:pid', deleteProduct);
 
-function helloWord(req,res){
-    res.send("Hello World");
+function helloWord(req, res) {
+	res.send("Hello World");
 }
 
-function getProductById(req,res,next){
+function getProductById(req, res, next) {
 	var options = {};
 	var pid = "";
-	if(req.params.pid)
+	if (req.params.pid)
 		pid = req.params.pid;
-	
-	when(controller.getProductById(pid,options),
-    function success(products) {
-			var reponse = {};
-			reponse.products = products;
-			reponse.status = successStatus;
+
+	when(controller.getProductById(pid, options),
+		function success(products) {
+			var response = {};
+			response.products = products;
+			response.status = successStatus;
 			res.send(response);
 			//return next();
 
-		}, function error(err) {
-            console.log(err);
-			var reponse = {};
-			reponse.err = err;
+		},
+		function error(err) {
+			console.log(err);
+			var response = {};
+			response.err = err;
 			res.send(response);
 			//return next();
-		});	
+		});
 }
+
 function getProducts(req, res, next) {
 	var options = {};
-	if(req.param.psize)
-		options.psize = req.params.psize;
+	if (req.query.psize)
+		options.psize = req.query.psize;
 
-	if(req.params.pnum)
-		options.pnum = req.params.pnum;
-		 	
+	if (req.query.pnum)
+		options.pnum = req.query.pnum;
+
 	when(controller.listAllProducts(options),
-    function success(products) {
+		function success(products) {
 			var reponse = {};
 			reponse.products = products;
 			reponse.status = successStatus;
 			res.send(response);
 			//return next();
 
-		}, function error(err) {
-            console.log(err);
+		},
+		function error(err) {
+			console.log(err);
 			var reponse = {};
 			reponse.err = err;
 			res.send(respo)
-			//return next();
+				//return next();
 		});
 }
 
 function createProduct(req, res, next) {
 	var options = {};
-    var productFromRequest = req.body;
-	controller.createProduct(productFromRequest,options)
-	.then(function success(products) {
+	var productFromRequest = req.body;
+	controller.createProduct(productFromRequest, options)
+		.then(function success(product) {
 			var reponse = {};
-			reponse.products = products;
+			reponse.product = product;
 			reponse.status = successStatus;
 			res.send(reponse);
 			//return next();
@@ -85,37 +88,42 @@ function createProduct(req, res, next) {
 
 function updateProduct(req, res, next) {
 	var options = {};
-	if(req.body.id)
-		var pid = req.body.id;
-	controller.updateProduct(pid, options)
-		.then(function success(products) {
-			var reponse = {};
-			reponse.products = products;
-			reponse.status = successStatus;
-			return next();
+	if (req.params.pid)
+		pid = req.params.pid;
+
+	controller.updateProduct(pid, req.body, options)
+		.then(function success(product) {
+			var response = {};
+			response.products = product;
+			response.status = successStatus;
+			res.send(response);
+			//return next();
 
 		}, function error(err) {
-			var reponse = {};
-			reponse.err = err;
-			return next();
+			var response = {};
+			response.err = err;
+			res.send(response);
+			//return next();
 		});
 }
 
 function deleteProduct(req, res, next) {
 	var options = {};
-	if(req.body.id)
-		var pid = req.body.id;
+	if (req.params.pid)
+		var pid = req.params.pid;
 	controller.deleteProduct(pid, options)
-		.then(function success(products) {
-			var reponse = {};
-			reponse.products = products;
-			reponse.status = successStatus;
-			return next();
+		.then(function success(product) {
+			var response = {};
+			response.product = product;
+			response.status = successStatus;
+			res.send(response)
+				//return next();
 
 		}, function error(err) {
-			var reponse = {};
-			reponse.err = err;
-			return next();
+			var response = {};
+			response.err = err;
+			res.send(response);
+			//return next();
 		});
 }
 

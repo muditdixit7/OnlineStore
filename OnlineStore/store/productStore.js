@@ -17,8 +17,7 @@ function getProductById(pid, options) {
 
 function getProducts(options) {
 	var promise = new Promise(function(resolve, reject) {
-
-		product.getProducts(options)
+    product.getProducts(options)
 			.then(function success(products) {
 				resolve(products);
 			}, function error(err) {
@@ -70,7 +69,7 @@ function deleteProduct(pid, options) {
 }
 
 exports.getProductById = getProductById;
-exports.listAllProducts = listAllProducts;
+exports.getProducts = getProducts;
 exports.createProduct = createProduct;
 exports.updateProduct = updateProduct;
 exports.deleteProduct = deleteProduct;

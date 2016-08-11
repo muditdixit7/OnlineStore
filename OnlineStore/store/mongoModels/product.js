@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
+var productErrors = require('../../routes/errors/productErrors.js')
 //var initPromise = new Promise(function(resolve,reject){
 mongoose.Promise = Promise;
 mongoose.connect(config.mongodb.url) //,function(err){
@@ -52,16 +53,21 @@ var productModel = mongoose.model('products', productSchema);
 exports.getProductById = function(pid, options) {
     var promise = new Promise(function(resolve, reject) {
         productModel.findById(pid, function(err, data) {
-            if (err)
+            if (err){
                 reject(err);
+            }
             else{
                 if(data === null){
-                    reject("No product by this id");//Change this
+                     var err = new productErrors.ProductNotFoundError(pid);
+                     reject(err);
                 }
-                var result = {};
-                result.product = data.docs;
-                resolve(result);
+                else{
+                    var result = {};
+                    result.product = data._doc;
+                    resolve(result);
+                }   
             }
+            
         });
     });
     return promise;
@@ -86,7 +92,7 @@ exports.getProducts = function(options) {
                 }
                else {
 					var response = {};
-					response.products = data.docs;
+					response.products = data._doc;
 					response.paging = {
 						pageNumber: data.page,
 						pageSize: data.limit,
@@ -105,8 +111,11 @@ exports.saveProduct = function(productObj, options) {
         product.save(function(err, data) {
             if (err)
                 reject(err);
-            else
-                resolve(data);
+            else{
+                var result = {};
+                result.product = data._doc;
+                resolve(result);
+            }
         });
     });
     return promise;
@@ -131,10 +140,15 @@ exports.updateProduct = function(pid, updatedObj, options) {
                 reject(err);
             else{
                 if(data === null){
-                    reject("No product by this id ");
+                     var err = new productErrors.ProductNotFoundError(pid);
+                     reject(err);
                 }
-                resolve(data);
-            }    
+                else{
+                    var result = {};
+                    result.product = data._doc;
+                    resolve(result);
+                }   
+            }
         });
     });
     return promise;

@@ -54,13 +54,20 @@ exports.getProductById = function(pid, options) {
         productModel.findById(pid, function(err, data) {
             if (err)
                 reject(err);
-            resolve(data);
+            else{
+                if(data === null){
+                    reject("No product by this id");//Change this
+                }
+                var result = {};
+                result.product = data.docs;
+                resolve(result);
+            }
         });
     });
     return promise;
 }
 
-exports.listProducts = function(options) {
+exports.getProducts = function(options) {
     var pageSize = 10;
     var pageNumber = 1;
     var promise = new Promise(function(resolve, reject) {
@@ -98,8 +105,8 @@ exports.saveProduct = function(productObj, options) {
         product.save(function(err, data) {
             if (err)
                 reject(err);
-
-            resolve(data);
+            else
+                resolve(data);
         });
     });
     return promise;
@@ -110,7 +117,8 @@ exports.deleteProduct = function(pid, options) {
         productModel.remove({_id:pid},function(err, data) {
             if (err)
                 reject(err);
-            resolve(data);
+            else
+                resolve(data);
         });
     });
     return promise;
@@ -121,7 +129,12 @@ exports.updateProduct = function(pid, updatedObj, options) {
         productModel.findByIdAndUpdate(pid, updatedObj, function(err, data) {
             if (err)
                 reject(err);
-            resolve(data);
+            else{
+                if(data === null){
+                    reject("No product by this id ");
+                }
+                resolve(data);
+            }    
         });
     });
     return promise;

@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var when = require('when');
-var controller = require('../controller/userController.js')
+var controller = require('../controller/productController.js')
 var successStatus = {
 	code: 200,
 	msg: "Success"
@@ -49,7 +49,7 @@ function getProducts(req, res, next) {
 	if (req.query.pnum)
 		options.pnum = req.query.pnum;
 
-	when(controller.listAllProducts(options),
+	when(controller.getProducts(options),
 		function success(products) {
 			var response = {};
 			response.products = products;

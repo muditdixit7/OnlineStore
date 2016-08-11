@@ -15,10 +15,10 @@ function getProductById(pid, options) {
 	return promise;
 }
 
-function listAllProducts(options) {
+function getProducts(options) {
 	var promise = new Promise(function(resolve, reject) {
 
-		product.listProducts(options)
+		product.getProducts(options)
 			.then(function success(products) {
 				resolve(products);
 			}, function error(err) {

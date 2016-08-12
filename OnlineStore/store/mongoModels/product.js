@@ -2,16 +2,20 @@ var mongoose = require('mongoose');
 var mongoosePaginate = require('mongoose-paginate');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
-var productErrors = require('../../routes/errors/productErrors.js')
-//var initPromise = new Promise(function(resolve,reject){
+var productErrors = require('../../routes/errors/productErrors.js');
 mongoose.Promise = Promise;
-mongoose.connect(config.mongodb.url) //,function(err){
-    //         if(!err)
-    //             resolve(initPromise);
-    //         else
-    //             reject(err);
-    //         })
-    // });
+
+exports.initPromise = function () {
+    var promise = new Promise(function (resolve, reject) {
+    mongoose.connect(config.mongodb.url, function (err) {
+            if (!err)
+                resolve();
+            else
+                reject(err);
+        })
+    })
+    return promise;
+};
 
 var productSchema = new mongoose.Schema({
     title: String,
@@ -43,75 +47,75 @@ var productSchema = new mongoose.Schema({
     }
 
 }, {
-    collection: 'products'
-})
+        collection: 'products'
+    })
 
 productSchema.plugin(mongoosePaginate);
 
 var productModel = mongoose.model('products', productSchema);
 
-exports.getProductById = function(pid, options) {
-    var promise = new Promise(function(resolve, reject) {
-        productModel.findById(pid, function(err, data) {
-            if (err){
+exports.getProductById = function (pid, options) {
+    var promise = new Promise(function (resolve, reject) {
+        productModel.findById(pid, function (err, data) {
+            if (err) {
                 reject(err);
             }
-            else{
-                if(data === null){
-                     var err = new productErrors.ProductNotFoundError(pid);
-                     reject(err);
+            else {
+                if (data === null) {
+                    var err = new productErrors.ProductNotFoundError(pid);
+                    reject(err);
                 }
-                else{
+                else {
                     var result = {};
                     result.product = data._doc;
                     resolve(result);
-                }   
+                }
             }
-            
+
         });
     });
     return promise;
 }
 
-exports.getProducts = function(options) {
+exports.getProducts = function (options) {
     var pageSize = 10;
     var pageNumber = 1;
-    var promise = new Promise(function(resolve, reject) {
-        if(options.psize)
+    var promise = new Promise(function (resolve, reject) {
+        if (options.psize)
             pageSize = options.psize;
 
-        if(options.pnum)
+        if (options.pnum)
             pageNumber = options.pnum;
-            
-        productModel.paginate({},{
-				page: pageNumber,
-				limit: pageSize
-			},function(err,data){
-                if (err){
-                    reject(err);
-                }
-               else {
-					var response = {};
-					response.products = data._doc;
-					response.paging = {
-						pageNumber: data.page,
-						pageSize: data.limit,
-						totalPages: data.pages
-					};
-					resolve(response);
-               }
-         });
+
+        productModel.paginate({}, {
+            page: pageNumber,
+            limit: pageSize
+        }, function (err, data) {
+            if (err) {
+                reject(err);
+            }
+            else {
+                var response = {};
+                response.products = data._doc;
+                response.paging = {
+                    pageNumber: data.page,
+                    pageSize: data.limit,
+                    totalPages: data.pages
+                };
+                resolve(response);
+            }
+        });
     });
     return promise;
 }
 
-exports.saveProduct = function(productObj, options) {
+exports.saveProduct = function (productObj, options) {
     var product = createMongoObjectFromRequestObj(productObj);
-    var promise = new Promise(function(resolve, reject) {
-        product.save(function(err, data) {
+    var promise = new Promise(function (resolve, reject) {
+        product.save(function (err, data) {
             if (err)
                 reject(err);
-            else{
+            else {
                 var result = {};
                 result.product = data._doc;
                 resolve(result);
@@ -121,9 +125,9 @@ exports.saveProduct = function(productObj, options) {
     return promise;
 }
 
-exports.deleteProduct = function(pid, options) {
-    var promise = new Promise(function(resolve, reject) {
-        productModel.remove({_id:pid},function(err, data) {
+exports.deleteProduct = function (pid, options) {
+    var promise = new Promise(function (resolve, reject) {
+        productModel.remove({ _id: pid }, function (err, data) {
             if (err)
                 reject(err);
             else
@@ -133,21 +137,21 @@ exports.deleteProduct = function(pid, options) {
     return promise;
 }
 
-exports.updateProduct = function(pid, updatedObj, options) {
-    var promise = new Promise(function(resolve, reject) {
-        productModel.findByIdAndUpdate(pid, updatedObj, function(err, data) {
+exports.updateProduct = function (pid, updatedObj, options) {
+    var promise = new Promise(function (resolve, reject) {
+        productModel.findByIdAndUpdate(pid, updatedObj, function (err, data) {
             if (err)
                 reject(err);
-            else{
-                if(data === null){
-                     var err = new productErrors.ProductNotFoundError(pid);
-                     reject(err);
+            else {
+                if (data === null) {
+                    var err = new productErrors.ProductNotFoundError(pid);
+                    reject(err);
                 }
-                else{
+                else {
                     var result = {};
                     result.product = data._doc;
                     resolve(result);
-                }   
+                }
             }
         });
     });

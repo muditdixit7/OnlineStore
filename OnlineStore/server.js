@@ -11,6 +11,7 @@ var Promise = require('es6-promise').Promise;
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var userRoutes = require('./routes/productRoutes');
+var imageRoutes = require('./routes/imageRoutes.js');
 var product = require('./store/mongoModels/product.js');
 
 var app = express();
@@ -36,7 +37,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/', userRoutes)
+app.use('/', userRoutes);
+app.use('/', imageRoutes);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -18,6 +18,17 @@ function ProductNotFoundError(pid){
     this.status.additional_details = [];
 }
 
+
+function FileUploadError(){
+	var temp 		 = Error.apply(this, arguments);
+	this.stack		 = temp.stack;
+	this.status      = {};
+	this.name		 = "FileUploadError";
+	this.status.code = errorCodes.FILE_UPLOADERROR.code;
+	this.status.msg  = errorCodes.FILE_UPLOADERROR.msg;
+    this.status.additional_details = [];
+}
+
 InvalidArguementError.prototype = Object.create(Error.prototype, {
     constructor: {
         value: InvalidArguementError,
@@ -34,5 +45,14 @@ ProductNotFoundError.prototype = Object.create(Error.prototype, {
     }
 });
 
+FileUploadError.prototype = Object.create(Error.prototype, {
+    constructor: {
+        value: FileUploadError,
+        writable: true,
+        configurable: true
+    }
+});
+
 exports.InvalidArguementError = InvalidArguementError;
 exports.ProductNotFoundError = ProductNotFoundError;
+exports.FileUploadError = FileUploadError;

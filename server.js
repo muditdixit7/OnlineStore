@@ -96,6 +96,7 @@ function startServer() {
                 console.log('Db not connected')
                 reject();
             });
+            
     });
     return promise;
 }

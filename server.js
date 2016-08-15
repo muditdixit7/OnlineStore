@@ -87,8 +87,11 @@ function startServer() {
     var promise = new Promise(function (resolve, reject) {
         when(product.initPromise(),
             function success() {
-                server.listen(process.env.PORT || 3000);
+                const PORT = process.env.PORT || 3000
+                server.listen(PORT,function(){
+                console.log('app runnig on :',PORT);    
                 resolve();
+                });
             }, function error() {
                 console.log('Db not connected')
                 reject();

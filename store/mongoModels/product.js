@@ -6,6 +6,7 @@ var productErrors = require('../../routes/errors/productErrors.js');
 mongoose.Promise = Promise;
 
 exports.initPromise = function () {
+    
     var promise = new Promise(function (resolve, reject) {
         var mongoUri = process.env.MONGODB_URI || config.mongodb.url
         mongoose.connect(mongoUri, function (err) {

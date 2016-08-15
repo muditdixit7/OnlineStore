@@ -7,7 +7,8 @@ mongoose.Promise = Promise;
 
 exports.initPromise = function () {
     var promise = new Promise(function (resolve, reject) {
-    mongoose.connect(config.mongodb.url, function (err) {
+    var mongoUri = process.env.MONGOLAB_URI || config.mongodb.url 
+    mongoose.connect(mongoUri, function (err) {
             if (!err)
                 resolve();
             else

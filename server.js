@@ -88,7 +88,7 @@ function startServer() {
         when(product.initPromise(),
             function success() {
                 const PORT = process.env.PORT || 3000
-                server.listen(PORT,function(){
+                server.listen(PORT,'0.0.0.0',function(){
                 console.log('app runnig on :',PORT);    
                 resolve();
                 });

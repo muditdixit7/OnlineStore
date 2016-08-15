@@ -16,9 +16,6 @@ var product = require('./store/mongoModels/product.js');
 
 var app = express();
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
 var server = http.createServer(app);
 
 // view engine setup
@@ -90,7 +87,7 @@ function startServer() {
     var promise = new Promise(function (resolve, reject) {
         when(product.initPromise(),
             function success() {
-                server.listen(port);
+                server.listen(process.env.PORT || '3000');
                 resolve();
             }, function error() {
                 console.log('Db not connected')

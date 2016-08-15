@@ -1,8 +1,13 @@
 var store = require('../store/productStore.js')
 var productErrors = require('../routes/errors/productErrors.js')
 var Promise = require('es6-promise').Promise;
+var moment = require('moment')
+var formats = [
+    moment.ISO_8601,
+    "YYYY/MM/DD/  :)  HH*mm*ss"
+];
 
-createProduct({}, {})
+var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
 
 
@@ -13,14 +18,15 @@ function getProductById(pid, options) {
         if (additionalDetails.length > 0) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
-        }
-        store.getProductById(pid, options)
-            .then(function success(product) {
-                resolve(product);
-            }, function error(err) {
-                reject(err);
-            });
-    });
+        }else{
+            store.getProductById(pid, options)
+                .then(function success(product) {
+                    resolve(product);
+                }, function error(err) {
+                    reject(err);
+                });
+            }
+        });
     return promise;
 }
 
@@ -46,34 +52,36 @@ function createProduct(productObj, options) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
         }
-
-        store.createProduct(productObj, options)
-            .then(function success(product) {
-                resolve(product);
-            }, function error(err) {
-                reject(err);
-            });
+        else{
+            store.createProduct(productObj, options)
+                .then(function success(product) {
+                    resolve(product);
+                }, function error(err) {
+                    reject(err);
+                });
+        }      
     })
     return promise;
 }
 
 function updateProduct(pid, updatedObj, options) {
     var promise = new Promise(function (resolve, reject) {
+        var additionalDetails = [];
         validateProductId(pid, additionalDetails);
-        validateProduct(updatedObj, additionalDetails);
 
         if (additionalDetails.length > 0) {
             var err = new productErrors.InvalidArguementError(pid);
             reject(err);
         }
-
-        store.updateProduct(pid, updatedObj, options)
-            .then(function success(products) {
-                resolve(products);
-            }, function error(err) {
-                reject(err);
-            });
-    })
+        else{
+            store.updateProduct(pid, updatedObj, options)
+                .then(function success(products) {
+                    resolve(products);
+               }, function error(err) {
+                    reject(err);
+                });
+            }
+        });
     return promise;
 }
 
@@ -86,14 +94,15 @@ function deleteProduct(pid, options) {
             var err = new productErrors.InvalidArguementError(pid);
             reject(err);
         }
-
+        else{
         store.deleteProduct(pid, options)
-            .then(function success(products) {
-                resolve(products);
+            .then(function success() {
+                resolve();
             }, function error(err) {
                 reject(err);
             });
-    })
+        }
+    });
     return promise;
 }
 
@@ -111,19 +120,19 @@ function validateProduct(productObj, additionalDetails) {
     if (!productObj.pricing.price || productObj.pricing.price <= 0)
         additionalDetails.push("title of product cannot be empty");
 
-    if (!productObj.manufactureDetails)
+    if (!productObj.manufacturingDetails)
         additionalDetails.push("manufactureDetails of product cannot be empty");
     else {
-        if (!productObj.manufactureDetails.manufactureName)
+        if (!productObj.manufacturingDetails.modelNumber)
             additionalDetails.push("manufactureDetails.manufactureName of product cannot be empty");
 
-        if (!productObj.manufactureDetails.releaseDate)
-            additionalDetails.push("manufactureDetails.releaseDate of product cannot be empty");
+        if (!productObj.manufacturingDetails.releaseDate )//|| moment(productObj.manufactureDetails.releaseDate, formats, true).isValid())
+            additionalDetails.push("manufactureDetails.releaseDate of product is either empty or invalid");
     }
 }
 
 function validateProductId(pid, additionalDetails) {
-    if (!pid) {
+    if (!checkForHexRegExp.test(pid)) {
         additionalDetails.push("Invalid/Empty product id");
     }
     // if(pid && typeof pid )check typeof pid

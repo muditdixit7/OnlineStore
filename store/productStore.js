@@ -59,8 +59,8 @@ function deleteProduct(pid, options) {
 	var promise = new Promise(function(resolve, reject) {
 
 		product.deleteProduct(pid, options)
-			.then(function success(products) {
-				resolve(products);
+			.then(function success() {
+				resolve();
 			}, function error(err) {
 				reject(err);
 			});

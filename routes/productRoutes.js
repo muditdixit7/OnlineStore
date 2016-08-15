@@ -115,9 +115,8 @@ function deleteProduct(req, res, next) {
     if (req.params.pid)
         var pid = req.params.pid;
     controller.deleteProduct(pid, options)
-        .then(function success(product) {
+        .then(function success() {
             var response = {};
-            response.product = product;//Correct this one
             response.status = successStatus;
             res.send(response)
             //return next();

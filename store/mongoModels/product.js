@@ -35,7 +35,7 @@ var productSchema = new mongoose.Schema({
         imgs: []
     },
 
-    manufactureDetails: {
+    manufacturingDetails: {
         modelNumber: String,
         releaseDate: Date
     },
@@ -66,9 +66,8 @@ exports.getProductById = function (pid, options) {
                     reject(err);
                 }
                 else {
-                    var result = {};
-                    result.product = data._doc;
-                    resolve(result);
+                    var product =  data._doc;
+                    resolve(product);
                 }
             }
 
@@ -96,7 +95,7 @@ exports.getProducts = function (options) {
             }
             else {
                 var response = {};
-                response.products = data._doc;
+                response.products = data.docs;
                 response.paging = {
                     pageNumber: data.page,
                     pageSize: data.limit,
@@ -116,9 +115,8 @@ exports.saveProduct = function (productObj, options) {
             if (err)
                 reject(err);
             else {
-                var result = {};
-                result.product = data._doc;
-                resolve(result);
+                var product = data._doc;
+                resolve(product);
             }
         });
     });
@@ -131,7 +129,7 @@ exports.deleteProduct = function (pid, options) {
             if (err)
                 reject(err);
             else
-                resolve(data);
+                resolve();
         });
     });
     return promise;
@@ -148,9 +146,8 @@ exports.updateProduct = function (pid, updatedObj, options) {
                     reject(err);
                 }
                 else {
-                    var result = {};
-                    result.product = data._doc;
-                    resolve(result);
+                    var product = data._doc;
+                    resolve(product);
                 }
             }
         });
@@ -164,7 +161,10 @@ createMongoObjectFromRequestObj = function name(productObj) {
         title: productObj.title,
         name: productObj.name,
         desc: productObj.desc,
-        //imageUrl : productObj.url
+        pricing : productObj.pricing,
+        manufacturingDetails : productObj.manufacturingDetails,
+        shippingDetails : productObj.shippingDetails,
+        quantity : productObj.quantity
     })
     return product
 }

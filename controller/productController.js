@@ -140,7 +140,6 @@ function validateProductId(pid, additionalDetails) {
     if (!checkForHexRegExp.test(pid)) {
         additionalDetails.push("Invalid/Empty product id");
     }
-    // if(pid && typeof pid )check typeof pid
 }
 exports.getProductById = getProductById;
 exports.getProducts = getProducts;

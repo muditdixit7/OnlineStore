@@ -3,7 +3,7 @@ var bcrypt = require('bycrypt');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
 SALT_WORK_FACTOR = 10;
-mongoose.Promise = Promise;
+
 
 
 var userSchema = new mongoose.Schema({

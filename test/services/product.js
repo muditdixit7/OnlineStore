@@ -13,6 +13,9 @@ var client = new Client();
 describe('Product service', function () { 
     describe('Get products', function () {
         it('should fetch a list of products', function (done) {
+            var args = {
+              headers: {"x-access-token" : "x-access-token" }
+            };
             client.get("http://localhost:3000/getProducts",function(data,response){
                 should.exist(data.products);
                 data.status.should.have.a.property("code").that.equals(200);
@@ -21,6 +24,9 @@ describe('Product service', function () {
             })
         });
           it('should fetch a list of products', function (done) {
+              var args = {
+              headers: {"x-access-token" : "x-access-token" }
+            };
                 client.get("http://localhost:3000/getProducts?psize=5&pnum=1",function(data,response){
                 should.exist(data.products);
                 data.status.should.have.a.property("code").that.equals(200);
@@ -29,6 +35,9 @@ describe('Product service', function () {
             })
         });
           it('should fetch a list of products', function (done) {
+              var args = {
+              headers: {"x-access-token" : "x-access-token" }
+            };
                 client.get("http://localhost:3000/getProducts?psize=5&pnum=1",function(data,response){
                 should.exist(data.products);
                 data.status.should.have.a.property("code").that.equals(200);
@@ -39,6 +48,9 @@ describe('Product service', function () {
     });
     describe('Get product by id', function () {
         it('should fetch a product of specified id', function (done) {
+            var args = {
+              headers: {"x-access-token" : "x-access-token" }
+            };
             client.get("http://localhost:3000/getProductById/57b1944f08a1f455232b860c",function(data,response){
                 should.exist(data.product);
                 data.product.should.have.a.property("title");
@@ -52,6 +64,9 @@ describe('Product service', function () {
             })
         });
           it('should not fetch a product', function (done) {
+              var args = {
+              headers: {"x-access-token" : "x-access-token" }
+            };
                 client.get("http://localhost:3000/getProductById/57a7868d75433",function(data,response){
                 should.not.exist(data.product);
                 data.status.should.have.a.property("code").that.equals(2001);
@@ -60,6 +75,9 @@ describe('Product service', function () {
             })
         });
           it('should fetch a product of specified id', function (done) {
+              var args = {
+              headers: {"x-access-token" : "x-access-token" }
+            };
                 client.get("http://localhost:3000/getProductById/57b1945b08a1f455232b860e",function(data,response){
                 should.exist(data.product);
                 data.product.should.have.a.property("title");
@@ -78,7 +96,7 @@ describe('Product service', function () {
         it('should successfully create a prdouct', function (done) {
             var args = {
               data: validCreateRequest,
-              headers: { "Content-Type": "application/json" }
+              headers: { "Content-Type": "application/json" , "x-access-token" : "x-access-token" }
             };
             client.post("http://localhost:3000/createProduct",args,function(data,response){
                 should.exist(data.product);
@@ -99,7 +117,7 @@ describe('Product service', function () {
               
               var args = {
               data: invalidCreateRequest,
-              headers: { "Content-Type": "application/json" }
+              headers: { "Content-Type": "application/json" , "x-access-token" : "x-access-token" }
               };
               
               client.post("http://localhost:3000/createProduct",args,function(data,response){
@@ -115,7 +133,7 @@ describe('Product service', function () {
             var args = {
               data: updateRequest,
               path:{pid : productId},
-              headers: { "Content-Type": "application/json" }
+              headers: { "Content-Type": "application/json" , "x-access-token" : "x-access-token" }
             };
             client.post("http://localhost:3000/updateProduct/${pid}",args,function(data,response){
                 should.exist(data.product);
@@ -137,7 +155,7 @@ describe('Product service', function () {
               var args = {
               data: invalidCreateRequest,
               path :{pid : "4938742hdgh"},
-              headers: { "Content-Type": "application/json" }
+              headers: { "Content-Type": "application/json" , "x-access-token" : "x-access-token" }
               };
               
               client.post("http://localhost:3000/updateProduct/${pid}",args,function(data,response){
@@ -153,7 +171,7 @@ describe('Product service', function () {
         it('should successfully delete the prdouct against specified product Id', function (done) {
             var args = {
               path : {pid : productId /*The product which was created is the same being deleted*/ },
-              headers: { "Content-Type": "application/json" }
+              headers: { "Content-Type": "application/json" , "x-access-token" : "x-access-token" }
             };
             client.delete("http://localhost:3000/deleteProduct/${pid}",args,function(data,response){
                 should.exist(data.status);
@@ -166,7 +184,7 @@ describe('Product service', function () {
              
               var args = {
                   path : {pid : "57a7868d75433"},
-                  headers: { "Content-Type": "application/json" }
+                  headers: { "Content-Type": "application/json" , "x-access-token" : "x-access-token" }
               };
               
               client.delete("http://localhost:3000/deleteProduct/${pid}",function(data,response){

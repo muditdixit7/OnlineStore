@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var when = require('when');
+var jwt = require('jsonwebtoken');
+var Cookies = require('cookies');
 var controller = require('../controller/productController.js')
 
 var successStatus = {
@@ -9,6 +11,29 @@ var successStatus = {
 };
 
 
+router.use(function(req, res, next) {
+	if (!req.decoded) {
+		var cookies = new Cookies(req,res)
+		var token = cookies.get('auth_token')
+		//req.body.token || req.param('token') || req.headers['x-access-token']
+		if (token) {
+			jwt.verify(token,appConfig.secret,function(err, decoded) {
+				if (err) {
+					res.json({success: false, message: 'Authentication failed'})
+					res.end()
+				} else {
+					req.decoded = decoded
+					next()
+				}
+			})
+		}
+		else
+		{
+				res.json({success: false, message: 'Authentication failed'})
+				res.end()	
+		}
+	}
+})
 router.get('/hello', helloWord);
 router.get('/getProducts', getProducts);
 router.get('/getProductById/:pid', getProductById)

@@ -1,2 +1,1 @@
-var enn = require('./server.js');
-enn.startServer();
+require('./server.js').startServer();

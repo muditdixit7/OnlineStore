@@ -20,12 +20,12 @@ function authenticate(userCreds, options) {
 function register(userObj, options) {
     var promise = new Promise(function (resolve, reject) {
         var additionalDetails = [];
-        validateUserObj(pid, additionalDetails);
+        validateUserObj(userObj, additionalDetails);
         if (additionalDetails.length > 0) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
         } else {
-            store.register(userCreds, options).then(
+            store.register(userObj, options).then(
                 function success() {
                     resolve();
                 }, function error(err) {
@@ -55,4 +55,3 @@ function validateUserObj(userObj, additionalDetails) {
 }
 exports.register = register;
 exports.authenticate = authenticate;
->>>>>>> 37402f6f38b7bd925a1ae428aa3b882aae9505fe

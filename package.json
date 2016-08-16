@@ -6,13 +6,16 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "~1.15.1",
     "chai": "^3.5.0",
     "cookie-parser": "~1.4.3",
+    "cookies": "^0.6.1",
     "debug": "~2.2.0",
     "es6-promise": "^3.2.1",
     "express": "~4.13.4",
     "jade": "~1.11.0",
+    "jsonwebtoken": "^7.1.9",
     "mocha": "^3.0.2",
     "moment": "^2.14.1",
     "mongoose": "^4.5.8",

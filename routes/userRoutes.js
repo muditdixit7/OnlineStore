@@ -1,12 +1,16 @@
 var express = require('express');
 var router = express.Router();
+var when = require('when');
 var jwt = require('jsonwebtoken');
 var Cookies = require('cookies')
 
 var controller = require('../controller/userController.js');
 var config = require('../configuration/config.js');
 
-
+var successStatus = {
+    code: 200,
+    msg: "Success"
+};
 
 router.post('/authenticate', authenticate);
 router.post('/register', register);
@@ -26,7 +30,7 @@ function authenticate(req, res, next) {
             var response = {};
             response.status = successStatus;
             
-            var token = jwt.sign(user, config.secret, {
+            var token = jwt.sign(user, config.jwt.secret, {
                 expiresIn: 3660 // expires in 24 hours
             });
             cookies = new Cookies(req, res)

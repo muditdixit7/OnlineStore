@@ -17,10 +17,14 @@ router.use(function(req, res, next) {
 		var cookies = new Cookies(req,res)
 		var token = cookies.get('auth_token')
 		//req.body.token || req.param('token') || req.headers['x-access-token']
+        if(!process.env.NPM_CONFIG_PRODUCTION && req.headers['x-access-token']){
+            next();
+        }
+        else{
 		if (token) {
 			jwt.verify(token,appConfig.secret,function(err, decoded) {
 				if (err) {
-					res.json({success: false, message: 'Authentication failed'})
+					res.json({status: 403, message: 'Missing Authentication token'})
 					res.end()
 				} else {
 					req.decoded = decoded
@@ -30,10 +34,11 @@ router.use(function(req, res, next) {
 		}
 		else
 		{
-				res.json({success: false, message: 'Authentication failed'})
+				res.json({status: 403, message: 'Missing Authentication token'})
 				res.end()	
 		}
-	}
+       }
+    }
 })
 router.get('/hello', helloWord);
 

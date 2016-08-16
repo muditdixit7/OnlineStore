@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bycrypt');
+var bcrypt = require('bcrypt');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
 SALT_WORK_FACTOR = 10;
@@ -17,7 +17,7 @@ var userSchema = new mongoose.Schema({
 
 var userModel = mongoose.model('user', userSchema);
 
-UserSchema.pre(save, function (next) {
+userSchema.pre('save', function (next) {
     var user = this;
 
     if (!user.isModified('password')) return next();
@@ -34,20 +34,20 @@ UserSchema.pre(save, function (next) {
     });
 });
 
-UserSchema.methods.comparePassword = function (candidatePassword, cb) {
-    bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+comparePassword = function (passwordFromRequest, passwordInDb, cb) {
+    bcrypt.compare(passwordFromRequest, passwordInDb, function (err, isMatch) {
         if (err) return cb(err);
         cb(null, isMatch);
     });
 };
 
 exports.authenticate = function (userCreds, options) {
-    var promise = new Promise(function (resove, reject) {
-        userModel.findOne({ username: userCreds.emailId }, function name(err, user) {
+    var promise = new Promise(function (resolve, reject) {
+        userModel.findOne({ emailId : userCreds.emailId }, function name(err, user) {
             if (err)
                 reject(err);
             else {
-                user.comparePassword(userCreds.password, function (err, isMatch) {
+                 comparePassword(userCreds.password, user.password, function (err, isMatch) {
                     if (err)
                         reject(err);
                     else {
@@ -59,6 +59,7 @@ exports.authenticate = function (userCreds, options) {
             }
         });
     });
+    return promise;
 }
 
 exports.register = function name(userObj, options) {

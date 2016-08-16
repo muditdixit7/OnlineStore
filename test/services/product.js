@@ -10,7 +10,7 @@ var productId = null;
 var client = new Client();
 
 
-describe('Product service', function () {
+describe('Product service', function () { 
     describe('Get products', function () {
         it('should fetch a list of products', function (done) {
             client.get("http://localhost:3000/getProducts",function(data,response){
@@ -110,7 +110,7 @@ describe('Product service', function () {
             })
         });
     });
-describe('Update product', function () {
+    describe('Update product', function () {
         it('should successfully update the prdouct', function (done) {
             var args = {
               data: updateRequest,

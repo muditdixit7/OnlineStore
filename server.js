@@ -9,7 +9,7 @@ var when = require('when');
 var Promise = require('es6-promise').Promise;
 
 var routes = require('./routes/index');
-var userRoutes = require('./routes/usersRoutes');
+var userRoutes = require('./routes/userRoutes.js');
 var productRoutes = require('./routes/productRoutes');
 var imageRoutes = require('./routes/imageRoutes.js');
 var product = require('./store/mongoModels/product.js');

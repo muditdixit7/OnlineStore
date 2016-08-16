@@ -5,7 +5,7 @@ var Promise = require('es6-promise').Promise;
 var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
 
-function getImages(req, res, next) {
+function getImages(pid, options) {
     var promise = new Promise(function (resolve, reject) {
         var additionalDetails = [];
         validateProductId(pid, additionalDetails);
@@ -13,7 +13,7 @@ function getImages(req, res, next) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
         } else {
-            store.getImage(pid, options)
+            store.getImages(pid, options)
                 .then(function success(images) {
                     resolve(images);
                 }, function error(err) {

@@ -2,8 +2,8 @@ var express = require('express');
 var router = express.Router();
 var multer  =   require('multer');
 
-var controller = require('../controller/imageController.js')
-var errors = require('./errors/productErrors.js')
+var controller = require('../controller/imageController.js');
+var when = require('when');
 var storage =   multer.diskStorage({
   destination: function (req, file, callback) {
     callback(null, './uploads');

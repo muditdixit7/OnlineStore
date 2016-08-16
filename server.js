@@ -9,8 +9,8 @@ var when = require('when');
 var Promise = require('es6-promise').Promise;
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
-var userRoutes = require('./routes/productRoutes');
+var userRoutes = require('./routes/usersRoutes');
+var productRoutes = require('./routes/productRoutes');
 var imageRoutes = require('./routes/imageRoutes.js');
 var product = require('./store/mongoModels/product.js');
 
@@ -33,8 +33,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/users', users);
 app.use('/', userRoutes);
+app.use('/', productRoutes);
 app.use('/', imageRoutes);
 
 // catch 404 and forward to error handler

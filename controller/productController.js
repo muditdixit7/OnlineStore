@@ -18,15 +18,15 @@ function getProductById(pid, options) {
         if (additionalDetails.length > 0) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
-        }else{
+        } else {
             store.getProductById(pid, options)
                 .then(function success(product) {
                     resolve(product);
                 }, function error(err) {
                     reject(err);
                 });
-            }
-        });
+        }
+    });
     return promise;
 }
 
@@ -52,14 +52,14 @@ function createProduct(productObj, options) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
         }
-        else{
+        else {
             store.createProduct(productObj, options)
                 .then(function success(product) {
                     resolve(product);
                 }, function error(err) {
                     reject(err);
                 });
-        }      
+        }
     })
     return promise;
 }
@@ -73,15 +73,15 @@ function updateProduct(pid, updatedObj, options) {
             var err = new productErrors.InvalidArguementError(pid);
             reject(err);
         }
-        else{
+        else {
             store.updateProduct(pid, updatedObj, options)
                 .then(function success(products) {
                     resolve(products);
-               }, function error(err) {
+                }, function error(err) {
                     reject(err);
                 });
-            }
-        });
+        }
+    });
     return promise;
 }
 
@@ -94,40 +94,45 @@ function deleteProduct(pid, options) {
             var err = new productErrors.InvalidArguementError(pid);
             reject(err);
         }
-        else{
-        store.deleteProduct(pid, options)
-            .then(function success() {
-                resolve();
-            }, function error(err) {
-                reject(err);
-            });
+        else {
+            store.deleteProduct(pid, options)
+                .then(function success() {
+                    resolve();
+                }, function error(err) {
+                    reject(err);
+                });
         }
     });
     return promise;
 }
 
 function validateProduct(productObj, additionalDetails) {
-    productObj.isValid = true; //Initially validating the product
 
-    if (!productObj.title)
-        additionalDetails.push("title of product cannot be empty");
-    if (!productObj.name)
-        additionalDetails.push("name of product cannot be empty");
 
-    if (!productObj.desc)
-        additionalDetails.push("desc of product cannot be empty");
+    if (!productObj)
+        additionalDetails.push("No parameters provided");
 
-    if (!productObj.pricing.price || productObj.pricing.price <= 0)
-        additionalDetails.push("title of product cannot be empty");
-
-    if (!productObj.manufacturingDetails)
-        additionalDetails.push("manufactureDetails of product cannot be empty");
     else {
-        if (!productObj.manufacturingDetails.modelNumber)
-            additionalDetails.push("manufactureDetails.manufactureName of product cannot be empty");
+        if (!productObj.title)
+            additionalDetails.push("title of product cannot be empty");
+        if (!productObj.name)
+            additionalDetails.push("name of product cannot be empty");
 
-        if (!productObj.manufacturingDetails.releaseDate )//|| moment(productObj.manufactureDetails.releaseDate, formats, true).isValid())
-            additionalDetails.push("manufactureDetails.releaseDate of product is either empty or invalid");
+        if (!productObj.desc)
+            additionalDetails.push("desc of product cannot be empty");
+
+        if (!productObj.pricing.price || productObj.pricing.price <= 0)
+            additionalDetails.push("title of product cannot be empty");
+
+        if (!productObj.manufacturingDetails)
+            additionalDetails.push("manufactureDetails of product cannot be empty");
+        else {
+            if (!productObj.manufacturingDetails.modelNumber)
+                additionalDetails.push("manufactureDetails.manufactureName of product cannot be empty");
+
+            if (!productObj.manufacturingDetails.releaseDate)//|| moment(productObj.manufactureDetails.releaseDate, formats, true).isValid())
+                additionalDetails.push("manufactureDetails.releaseDate of product is either empty or invalid");
+        }
     }
 }
 

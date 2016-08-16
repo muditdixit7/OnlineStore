@@ -7,8 +7,8 @@ mongoose.Promise = Promise;
 
 exports.initPromise = function () {
     var promise = new Promise(function (resolve, reject) {
-    var mongoUri = process.env.MONGOLAB_URI || config.mongodb.url 
-    mongoose.connect(mongoUri, function (err) {
+        var mongoUri = process.env.MONGOLAB_URI || config.mongodb.url
+        mongoose.connect(mongoUri, function (err) {
             if (!err)
                 resolve();
             else
@@ -19,37 +19,32 @@ exports.initPromise = function () {
 };
 
 var productSchema = new mongoose.Schema({
-    title: String,
-    name: String,
-    desc: String,
+    title: { type: String, required: true },
+    name: { type: String, required: true },
+    desc: { type: String, required: true },
 
     shippingDetails: {
         deimensions: {
-            height: String,
-            width: String,
-            Weight: String,
+            height: { type: String, required: true },
+            width: { type: String, required: true },
         },
         weight: String
     },
 
-    assets: {
-        imgs: []
-    },
-
     manufacturingDetails: {
-        modelNumber: String,
-        releaseDate: Date
+        modelNumber: { type: String, required: true },
+        releaseDate: { type: Date, required: true }
     },
 
-    quantity: Number,
+    quantity: { type: Number, required: true },
 
     pricing: {
-        price: Number
+        price: { type: Number, required: true }
     }
 
 }, {
         collection: 'products'
-    })
+    });
 
 productSchema.plugin(mongoosePaginate);
 
@@ -67,7 +62,7 @@ exports.getProductById = function (pid, options) {
                     reject(err);
                 }
                 else {
-                    var product =  data._doc;
+                    var product = data._doc;
                     resolve(product);
                 }
             }
@@ -162,10 +157,10 @@ createMongoObjectFromRequestObj = function name(productObj) {
         title: productObj.title,
         name: productObj.name,
         desc: productObj.desc,
-        pricing : productObj.pricing,
-        manufacturingDetails : productObj.manufacturingDetails,
-        shippingDetails : productObj.shippingDetails,
-        quantity : productObj.quantity
+        pricing: productObj.pricing,
+        manufacturingDetails: productObj.manufacturingDetails,
+        shippingDetails: productObj.shippingDetails,
+        quantity: productObj.quantity
     })
     return product
 }

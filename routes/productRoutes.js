@@ -2,7 +2,8 @@ var express = require('express');
 var router = express.Router();
 var when = require('when');
 var jwt = require('jsonwebtoken');
-var Cookies = require('cookies');
+var appConfig = require('../configuration/config.js');
+var Cookies = require('cookies')
 var controller = require('../controller/productController.js')
 
 var successStatus = {
@@ -35,6 +36,35 @@ router.use(function(req, res, next) {
 	}
 })
 router.get('/hello', helloWord);
+
+router.use(function (req, res, next) {
+    if (!req.decoded) {
+        var cookies = new Cookies(req, res)
+        var token = cookies.get('auth_token')
+        //req.body.token || req.param('token') || req.headers['x-access-token']
+        if (!process.env.CONFIG && req.headers['x-access-token']) {
+            next();
+        } else {
+            if (token) {
+                jwt.verify(token, appConfig.secret, function (err, decoded) {
+                    if (err) {
+                        res.json({ success: false, message: 'Authentication failed' });
+                        res.end();
+                    } else {
+                        req.decoded = decoded
+                        next()
+                    }
+                })
+            }
+            else {
+                res.json({ success: false, message: 'Authentication failed' })
+                res.end();
+            }
+        }
+    }
+});
+
+
 router.get('/getProducts', getProducts);
 router.get('/getProductById/:pid', getProductById)
 router.post('/updateProduct/:pid', updateProduct);

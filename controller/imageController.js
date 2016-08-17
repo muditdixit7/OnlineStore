@@ -5,7 +5,7 @@ var Promise = require('es6-promise').Promise;
 var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
 
-function getImages(pid, options) {
+function uploadImages(pid, images, options) {
     var promise = new Promise(function (resolve, reject) {
         var additionalDetails = [];
         validateProductId(pid, additionalDetails);
@@ -13,7 +13,7 @@ function getImages(pid, options) {
             var err = new productErrors.InvalidArguementError(additionalDetails);
             reject(err);
         } else {
-            store.getImages(pid, options)
+            store.uploadImages(pid, images, options)
                 .then(function success(images) {
                     resolve(images);
                 }, function error(err) {
@@ -26,11 +26,12 @@ function getImages(pid, options) {
 
 
 
-
 function validateProductId(pid, additionalDetails) {
     if (!checkForHexRegExp.test(pid)) {
         additionalDetails.push("Invalid/Empty product id");
     }
     // if(pid && typeof pid )check typeof pid
 }
-exports.getImages = getImages
+
+
+exports.uploadImages = uploadImages;

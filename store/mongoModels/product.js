@@ -1,12 +1,15 @@
 var mongoose = require('mongoose');
+var path = require('path');
 var mongoosePaginate = require('mongoose-paginate');
 var Promise = require('es6-promise').Promise;
+var fs = require('fs');
+
 var config = require('../../configuration/config.js');
 var productErrors = require('../../routes/errors/productErrors.js');
 mongoose.Promise = Promise;
 
 exports.initPromise = function () {
-    
+
     var promise = new Promise(function (resolve, reject) {
         var mongoUri = process.env.MONGODB_URI || config.mongodb.url
         mongoose.connect(mongoUri, function (err) {
@@ -32,6 +35,10 @@ var productSchema = new mongoose.Schema({
         weight: String
     },
 
+    images: [{
+        data: { type: Buffer },
+        contentType: { type: String }
+    }],
     manufacturingDetails: {
         modelNumber: { type: String, required: true },
         releaseDate: { type: Date, required: true }
@@ -51,7 +58,7 @@ productSchema.plugin(mongoosePaginate);
 
 var productModel = mongoose.model('products', productSchema);
 
-exports.getProductById = function (pid, options) {
+exports.getProductById = function (pid, images, options) {
     var promise = new Promise(function (resolve, reject) {
         productModel.findById(pid, function (err, data) {
             if (err) {
@@ -145,6 +152,35 @@ exports.updateProduct = function (pid, updatedObj, options) {
                 else {
                     var product = data._doc;
                     resolve(product);
+                }
+            }
+        });
+    });
+    return promise;
+}
+
+
+exports.uploadImages = function (pid, images, options) {
+    var promise = new Promise(function (resolve, reject) {
+        productModel.findById(pid, function (err, data) {
+            if (err)
+                reject(err);
+            else {
+                if (data === null) {
+                    var err = new productErrors.ProductNotFoundError(pid);
+                    reject(err);
+                }
+                else {
+
+                    images.forEach(function (image) {
+                        var img = {};
+                        img.data = fs.readFileSync(path.join(process.cwd() + '\\' + image.path));
+                        img.contentType = 'image/png';
+                        data._doc.images.push(img);
+
+                    }, this);
+                    data.save();
+                    resolve();
                 }
             }
         });

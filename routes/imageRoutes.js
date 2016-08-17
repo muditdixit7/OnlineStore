@@ -1,42 +1,31 @@
 var express = require('express');
 var router = express.Router();
-var multer  =   require('multer');
+var multer = require('multer');
 
 var controller = require('../controller/imageController.js');
 var when = require('when');
-var storage =   multer.diskStorage({
-  destination: function (req, file, callback) {
-    callback(null, './uploads');
-  },
-  filename: function (req, file, callback) {
-    callback(null, file.fieldname +'-'+ req.params.objectId +'-'+ Date.now()+'.png');
-  }
-});
+
+upload = multer({
+    dest: './uploads/'
+})
 
 var successStatus = {
     code: 200,
     msg: "Success"
 };
-var upload = multer({ storage : storage}).array('productImages',10);
 
-router.get('/getImages/:pid',getImages);
 
-router.post('/uploadImages/:pid',function(req,res,next){
-    upload(req,res,function(err) {
-        if(err) {
-            return res.end(new errors.FileUploadError());
-        }
-        res.end();
-    });
-});
+router.post('/uploadImages/:pid', upload.any(), uploadImages);
 
-function getImages(req, res, next) {
+
+function uploadImages(req, res, next) {
     var options = {};
     var pid = "";
     if (req.params.pid)
         pid = req.params.pid;
+    var images = req.files;
 
-    when(controller.getImages(pid, options),
+    when(controller.uploadImages(pid, images, options),
         function success(images) {
             var response = {};
             response.images = images;

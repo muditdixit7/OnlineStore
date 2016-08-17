@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
 SALT_WORK_FACTOR = 10;

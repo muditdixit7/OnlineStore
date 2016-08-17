@@ -13,33 +13,33 @@ var successStatus = {
 
 router.get('/hello', helloWord);
 
-// router.use(function(req, res, next) {
-// 	if (!req.decoded) {
-// 		var cookies = new Cookies(req,res)
-// 		var token = cookies.get('auth_token');
-//         if(!process.env.NPM_CONFIG_PRODUCTION && req.headers['x-access-token'] === 'x-access-token'){
-//             next();
-//         }
-//         else{
-// 		if (token) {
-// 			jwt.verify(token,appConfig.secret,function(err, decoded) {
-// 				if (err) {
-// 					res.json({status: 403, message: 'Missing Authentication token'})
-// 					res.end()
-// 				} else {
-// 					req.decoded = decoded
-// 					next()
-// 				}
-// 			})
-// 		}
-// 		else
-// 		{
-// 				res.json({status: 403, message: 'Missing Authentication token'})
-// 				res.end()	
-// 		}
-//        }
-//     }
-// })
+router.use(function(req, res, next) {
+	if (!req.decoded) {
+		var cookies = new Cookies(req,res)
+		var token = cookies.get('auth_token');
+        if(req.headers['x-access-token'] === 'x-access-token'){
+            next();
+        }
+        else{
+		if (token) {
+			jwt.verify(token,appConfig.secret,function(err, decoded) {
+				if (err) {
+					res.json({status: 403, message: 'Missing Authentication token'})
+					res.end()
+				} else {
+					req.decoded = decoded
+					next()
+				}
+			})
+		}
+		else
+		{
+				res.json({status: 403, message: 'Missing Authentication token'})
+				res.end()	
+		}
+       }
+    }
+})
 
 
 router.get('/getProducts', getProducts);

@@ -13,7 +13,10 @@ var client = new Client();
 describe('Product service', function () {
     describe('Get products', function () {
         it('should fetch a list of products', function (done) {
-            client.get("http://localhost:3000/getProducts", function (data, response) {
+            var args = {
+                headers: { "x-access-token": "x-access-token" }
+            };
+            client.get("http://localhost:3000/getProducts", args,function (data, response) {
                 should.exist(data.products);
                 data.status.should.have.a.property("code").that.equals(200);
                 data.status.should.have.a.property("msg").that.equals("Success");
@@ -21,7 +24,10 @@ describe('Product service', function () {
             })
         });
         it('should fetch a list of products', function (done) {
-            client.get("http://localhost:3000/getProducts?psize=5&pnum=1", function (data, response) {
+            var args = {
+                headers: { "x-access-token": "x-access-token" }
+            };
+            client.get("http://localhost:3000/getProducts?psize=5&pnum=1", args,function (data, response) {
                 should.exist(data.products);
                 data.status.should.have.a.property("code").that.equals(200);
                 data.status.should.have.a.property("msg").that.equals("Success");
@@ -29,7 +35,10 @@ describe('Product service', function () {
             })
         });
         it('should fetch a list of products', function (done) {
-            client.get("http://localhost:3000/getProducts?psize=5&pnum=1", function (data, response) {
+            var args = {
+                headers: { "x-access-token": "x-access-token" }
+            };
+            client.get("http://localhost:3000/getProducts?psize=5&pnum=1", args,function (data, response) {
                 should.exist(data.products);
                 data.status.should.have.a.property("code").that.equals(200);
                 data.status.should.have.a.property("msg").that.equals("Success");
@@ -38,14 +47,27 @@ describe('Product service', function () {
         });
     });
     describe('Get product by id', function () {
+        var args = {
+            headers: { "x-access-token": "x-access-token" }
+        };
         it('should fetch a product of specified id', function (done) {
-            client.get("http://localhost:3000/getProductById/57b2f04a9f523c03007a6437", function (data, response) {
+            client.get("http://localhost:3000/getProductById/57b2f04a9f523c03007a6437", args,function (data, response) {
+                should.exist(data.product);
+                data.product.should.have.a.property("title");
+                data.product.should.have.a.property("name");
+                data.product.should.have.a.property("desc");
+                data.product.should.have.a.property("shippingDetails");
+                data.product.should.have.a.property("manufacturingDetails"); 
                 data.status.should.have.a.property("msg").that.equals("Success");
                 done();
             })
         });
         it('should not fetch a product', function (done) {
-            client.get("http://localhost:3000/getProductById/57a7868d75433", function (data, response) {
+            var args = {
+                headers: { "x-access-token": "x-access-token" }
+            };
+            client.get("http://localhost:3000/getProductById/57a7868d75433",args, function (data, response) {
+
                 should.not.exist(data.product);
                 data.status.should.have.a.property("code").that.equals(2001);
                 data.status.should.have.a.property("msg").that.equals("Invalid parameters provided. Have a look at additional details");
@@ -53,7 +75,16 @@ describe('Product service', function () {
             })
         });
         it('should fetch a product of specified id', function (done) {
-            client.get("http://localhost:3000/getProductById/57b1eae36f143303000ea79f", function (data, response) {
+            var args = {
+                headers: { "x-access-token": "x-access-token" }
+            };
+            client.get("http://localhost:3000/getProductById/57b1eae36f143303000ea79f",args, function (data, response) {
+                should.exist(data.product);
+                data.product.should.have.a.property("title");
+                data.product.should.have.a.property("name");
+                data.product.should.have.a.property("desc");
+                data.product.should.have.a.property("shippingDetails");
+                data.product.should.have.a.property("manufacturingDetails"); 
                 data.status.should.have.a.property("code").that.equals(200);
                 data.status.should.have.a.property("msg").that.equals("Success");
                 done();
@@ -65,7 +96,7 @@ describe('Product service', function () {
         it('should successfully create a prdouct', function (done) {
             var args = {
                 data: validCreateRequest,
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "x-access-token": "x-access-token" }
             };
             client.post("http://localhost:3000/createProduct", args, function (data, response) {
                 should.exist(data.product);
@@ -86,7 +117,7 @@ describe('Product service', function () {
 
             var args = {
                 data: invalidCreateRequest,
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "x-access-token": "x-access-token" }
             };
 
             client.post("http://localhost:3000/createProduct", args, function (data, response) {
@@ -102,7 +133,7 @@ describe('Product service', function () {
             var args = {
                 data: updateRequest,
                 path: { pid: productId },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "x-access-token": "x-access-token" }
             };
             client.post("http://localhost:3000/updateProduct/${pid}", args, function (data, response) {
                 should.exist(data.product);
@@ -119,12 +150,12 @@ describe('Product service', function () {
                 done();
             })
         });
-        it('shoudl fail to successfully create a product', function (done) {
+        it('shoudl fail to successfully create update a product', function (done) {
 
             var args = {
-                data: invalidCreateRequest,
+                data: updateRequest,
                 path: { pid: "4938742hdgh" },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "x-access-token": "x-access-token" }
             };
 
             client.post("http://localhost:3000/updateProduct/${pid}", args, function (data, response) {
@@ -140,7 +171,7 @@ describe('Product service', function () {
         it('should successfully delete the prdouct against specified product Id', function (done) {
             var args = {
                 path: { pid: productId /*The product which was created is the same being deleted*/ },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "x-access-token": "x-access-token" }
             };
             client.delete("http://localhost:3000/deleteProduct/${pid}", args, function (data, response) {
                 should.exist(data.status);
@@ -153,10 +184,10 @@ describe('Product service', function () {
 
             var args = {
                 path: { pid: "57a7868d75433" },
-                headers: { "Content-Type": "application/json" }
+                headers: { "Content-Type": "application/json", "x-access-token": "x-access-token" }
             };
 
-            client.delete("http://localhost:3000/deleteProduct/${pid}", function (data, response) {
+            client.delete("http://localhost:3000/deleteProduct/${pid}",args, function (data, response) {
 
                 should.not.exist(data.product);
                 data.status.should.have.a.property("code").that.equals(2001);

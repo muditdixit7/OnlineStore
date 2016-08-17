@@ -1,4 +1,4 @@
-//run mocha test/services/*.js to initiate the service tests
+//run "mocha test/services/*.js --timeout 100000" to initiate the service tests
 before(function(done) {
 	var pr = require('../../server.js').startServer();
 	pr.then(function() {

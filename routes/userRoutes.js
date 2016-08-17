@@ -29,15 +29,14 @@ function authenticate(req, res, next) {
         function success(user) {
             var response = {};
             response.status = successStatus;
-            
+
             var token = jwt.sign(user, config.jwt.secret, {
                 expiresIn: 3660 // expires in 24 hours
             });
             cookies = new Cookies(req, res)
             cookies.set('auth_token', token)
-            //response.write(new Buffer(JSON.stringify(user)))
             res.send(response);
-            //return next();
+            return next();
 
         },
         function error(err) {
@@ -45,7 +44,7 @@ function authenticate(req, res, next) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 
 }
@@ -59,13 +58,14 @@ function register(req, res, next) {
             var response = {};
             response.status = successStatus;
             res.send(response);
+            return next();
         },
         function error(err) {
             console.log(err);
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 
 }

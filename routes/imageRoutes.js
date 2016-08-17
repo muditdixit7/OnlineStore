@@ -31,7 +31,7 @@ function uploadImages(req, res, next) {
             response.images = images;
             response.status = successStatus;
             res.send(response);
-            //return next();
+            return next();
 
         },
         function error(err) {
@@ -39,7 +39,7 @@ function uploadImages(req, res, next) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 }
 

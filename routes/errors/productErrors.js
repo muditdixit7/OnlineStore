@@ -1,31 +1,31 @@
 var errorCodes = require('./errorCodes.js');
 
-function InvalidArguementError(additional_details){
-	var temp 					   = Error.apply(this, arguments);
-	this.stack					   = temp.stack;
-	this.name 					   = "InvalidArguementError";
-	this.status                    = errorCodes.INVALID_PARAMETERS;
-	this.status.additional_details = additional_details;
+function InvalidArguementError(additional_details) {
+    var temp = Error.apply(this, arguments);
+    this.stack = temp.stack;
+    this.name = "InvalidArguementError";
+    this.status = errorCodes.INVALID_PARAMETERS;
+    this.status.additional_details = additional_details;
 }
 
-function ProductNotFoundError(pid){
-	var temp 		 = Error.apply(this, arguments);
-	this.stack		 = temp.stack;
-	this.status      = {};
-	this.name		 = "ProductNotFoundError";
-	this.status.code = errorCodes.PRODUCT_NOTFOUND.code;
-	this.status.msg  = errorCodes.PRODUCT_NOTFOUND.msg + " " + pid ;
+function ProductNotFoundError(pid) {
+    var temp = Error.apply(this, arguments);
+    this.stack = temp.stack;
+    this.status = {};
+    this.name = "ProductNotFoundError";
+    this.status.code = errorCodes.PRODUCT_NOTFOUND.code;
+    this.status.msg = errorCodes.PRODUCT_NOTFOUND.msg + " " + pid;
     this.status.additional_details = [];
 }
 
 
-function FileUploadError(){
-	var temp 		 = Error.apply(this, arguments);
-	this.stack		 = temp.stack;
-	this.status      = {};
-	this.name		 = "FileUploadError";
-	this.status.code = errorCodes.FILE_UPLOADERROR.code;
-	this.status.msg  = errorCodes.FILE_UPLOADERROR.msg;
+function FileUploadError() {
+    var temp = Error.apply(this, arguments);
+    this.stack = temp.stack;
+    this.status = {};
+    this.name = "FileUploadError";
+    this.status.code = errorCodes.FILE_UPLOADERROR.code;
+    this.status.msg = errorCodes.FILE_UPLOADERROR.msg;
     this.status.additional_details = [];
 }
 

@@ -13,31 +13,30 @@ var successStatus = {
 
 router.get('/hello', helloWord);
 
-router.use(function(req, res, next) {
-	if (!req.decoded) {
-		var cookies = new Cookies(req,res)
-		var token = cookies.get('auth_token');
-        if(req.headers['x-access-token'] === 'x-access-token'){
+router.use(function (req, res, next) {
+    if (!req.decoded) {
+        var cookies = new Cookies(req, res)
+        var token = cookies.get('auth_token');
+        if (req.headers['x-access-token'] === 'x-access-token') {
             next();
         }
-        else{
-		if (token) {
-			jwt.verify(token,appConfig.secret,function(err, decoded) {
-				if (err) {
-					res.json({status: 403, message: 'Missing Authentication token'})
-					res.end()
-				} else {
-					req.decoded = decoded
-					next()
-				}
-			})
-		}
-		else
-		{
-				res.json({status: 403, message: 'Missing Authentication token'})
-				res.end()	
-		}
-       }
+        else {
+            if (token) {
+                jwt.verify(token, appConfig.secret, function (err, decoded) {
+                    if (err) {
+                        res.json({ status: 403, message: 'Missing Authentication token' })
+                        res.end()
+                    } else {
+                        req.decoded = decoded
+                        next()
+                    }
+                })
+            }
+            else {
+                res.json({ status: 403, message: 'Missing Authentication token' })
+                res.end()
+            }
+        }
     }
 })
 
@@ -64,7 +63,7 @@ function getProductById(req, res, next) {
             response.product = product;
             response.status = successStatus;
             res.send(response);
-            //return next();
+            return next();
 
         },
         function error(err) {
@@ -72,7 +71,7 @@ function getProductById(req, res, next) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 }
 
@@ -90,7 +89,7 @@ function getProducts(req, res, next) {
             response.products = products;
             response.status = successStatus;
             res.send(response);
-            //return next();
+            return next();
 
         },
         function error(err) {
@@ -98,7 +97,7 @@ function getProducts(req, res, next) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 }
 
@@ -111,13 +110,13 @@ function createProduct(req, res, next) {
             reponse.product = product;
             reponse.status = successStatus;
             res.send(reponse);
-            //return next();
+            return next();
 
         }, function error(err) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 }
 
@@ -127,18 +126,17 @@ function updateProduct(req, res, next) {
         pid = req.params.pid;
 
     controller.updateProduct(pid, req.body, options)
-        .then(function success(product) {
+        .then(function success() {
             var response = {};
-            response.product = product;
             response.status = successStatus;
             res.send(response);
-            //return next();
+            return next();
 
         }, function error(err) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 }
 
@@ -151,13 +149,13 @@ function deleteProduct(req, res, next) {
             var response = {};
             response.status = successStatus;
             res.send(response)
-            //return next();
+            return next();
 
         }, function error(err) {
             var response = {};
             response.status = err.status;
             res.send(response);
-            //return next();
+            return next();
         });
 }
 

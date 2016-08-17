@@ -1,4 +1,4 @@
-module.exports ={
+module.exports = {
     "title": "",
     "name": "",
     "desc": "The best water purifier",

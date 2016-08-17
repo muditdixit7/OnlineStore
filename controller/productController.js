@@ -75,8 +75,8 @@ function updateProduct(pid, updatedObj, options) {
         }
         else {
             store.updateProduct(pid, updatedObj, options)
-                .then(function success(products) {
-                    resolve(products);
+                .then(function success() {
+                    resolve();
                 }, function error(err) {
                     reject(err);
                 });

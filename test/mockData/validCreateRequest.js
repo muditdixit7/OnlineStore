@@ -1,4 +1,4 @@
-module.exports ={
+module.exports = {
     "title": "AquaGuard",
     "name": "Aqua guard RO",
     "desc": "The best water purifier",

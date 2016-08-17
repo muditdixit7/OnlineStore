@@ -150,8 +150,7 @@ exports.updateProduct = function (pid, updatedObj, options) {
                     reject(err);
                 }
                 else {
-                    var product = data._doc;
-                    resolve(product);
+                    resolve();
                 }
             }
         });

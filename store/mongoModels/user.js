@@ -43,11 +43,11 @@ comparePassword = function (passwordFromRequest, passwordInDb, cb) {
 
 exports.authenticate = function (userCreds, options) {
     var promise = new Promise(function (resolve, reject) {
-        userModel.findOne({ emailId : userCreds.emailId }, function name(err, user) {
+        userModel.findOne({ emailId: userCreds.emailId }, function name(err, user) {
             if (err)
                 reject(err);
             else {
-                 comparePassword(userCreds.password, user.password, function (err, isMatch) {
+                comparePassword(userCreds.password, user.password, function (err, isMatch) {
                     if (err)
                         reject(err);
                     else {

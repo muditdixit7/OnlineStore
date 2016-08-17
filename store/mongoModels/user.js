@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var Promise = require('es6-promise').Promise;
 var config = require('../../configuration/config.js');
+var productErrors = require('../../routes/errors/productErrors.js');
+
 SALT_WORK_FACTOR = 10;
 
 
@@ -65,14 +67,21 @@ exports.authenticate = function (userCreds, options) {
 exports.register = function name(userObj, options) {
     var user = createMongoObjectFromRequestObj(userObj);
     var promise = new Promise(function (resolve, reject) {
-        user.save(function (err, data) {
-            if (err)
-                reject(err);
-            else {
-                resolve();
+        userModel.findOne({ emailId: user.emailId }, function name(err, user) {
+            if (user != null) {
+                var err = new productErrors.InvalidArguementError("emaildId already exists");
+                reject(err)
+            } else {
+                user.save(function (err, data) {
+                    if (err)
+                        reject(err);
+                    else {
+                        resolve();
+                    }
+                });
             }
         });
-    });
+    })
     return promise;
 }
 

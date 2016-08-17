@@ -120,6 +120,7 @@ function createProduct(req, res, next) {
         });
 }
 
+
 function updateProduct(req, res, next) {
     var options = {};
     if (req.params.pid)

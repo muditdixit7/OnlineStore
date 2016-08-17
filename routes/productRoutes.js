@@ -11,6 +11,8 @@ var successStatus = {
     msg: "Success"
 };
 
+
+
 router.get('/hello', helloWord);
 
 router.use(function (req, res, next) {

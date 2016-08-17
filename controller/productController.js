@@ -2,10 +2,7 @@ var store = require('../store/productStore.js')
 var productErrors = require('../routes/errors/productErrors.js')
 var Promise = require('es6-promise').Promise;
 var moment = require('moment')
-var formats = [
-    moment.ISO_8601,
-    "YYYY/MM/DD/  :)  HH*mm*ss"
-];
+var dateFormat = "YYYY/MM/DD";
 
 var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
 
@@ -130,7 +127,7 @@ function validateProduct(productObj, additionalDetails) {
             if (!productObj.manufacturingDetails.modelNumber)
                 additionalDetails.push("manufactureDetails.manufactureName of product cannot be empty");
 
-            if (!productObj.manufacturingDetails.releaseDate)//|| moment(productObj.manufactureDetails.releaseDate, formats, true).isValid())
+            if (!productObj.manufacturingDetails.releaseDate  || !moment(productObj.manufacturingDetails.releaseDate, dateFormat, true).isValid())
                 additionalDetails.push("manufactureDetails.releaseDate of product is either empty or invalid");
         }
     }

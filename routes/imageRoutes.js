@@ -9,9 +9,14 @@ var storage =   multer.diskStorage({
     callback(null, './uploads');
   },
   filename: function (req, file, callback) {
-    callback(null, file.fieldname +'-'+ req.params.objectId +'-'+ Date.now());
+    callback(null, file.fieldname +'-'+ req.params.objectId +'-'+ Date.now()+'.png');
   }
 });
+
+var successStatus = {
+    code: 200,
+    msg: "Success"
+};
 var upload = multer({ storage : storage}).array('productImages',10);
 
 router.get('/getImages/:pid',getImages);
@@ -32,9 +37,9 @@ function getImages(req, res, next) {
         pid = req.params.pid;
 
     when(controller.getImages(pid, options),
-        function success(product) {
+        function success(images) {
             var response = {};
-            response.product = product;
+            response.images = images;
             response.status = successStatus;
             res.send(response);
             //return next();
